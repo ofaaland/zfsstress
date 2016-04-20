@@ -24,7 +24,7 @@ export SUDO="sudo"
 
 #
 # Run $COUNT instances of $CMD, saving the
-# output in ${LOGDIR}/$CMD.$HOSTNAME.$$.$instance.log
+# output in ${LOGDIR}/$CMD.$(hostname).$$.$instance.log
 # XXX: the size of the log file is not bounded.  For
 # long runs it may fill up the filesystem, exceed the
 # quota, etc.  Will need an implementation of log_writer
@@ -39,7 +39,7 @@ runmany()
 	local logname
 	set -x
 	for instance in $(seq $COUNT); do
-		logname="${LOGDIR}/${CMD}.${HOSTNAME}.$$.${instance}.log"
+		logname="${LOGDIR}/${CMD}.$(hostname).$$.${instance}.log"
 		$CMD < /dev/null > ${logname} 2>&1 &
 	done
 	set +x
