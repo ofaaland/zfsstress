@@ -2,14 +2,10 @@
 
 BASEDIR=$(pushd $(dirname $0) >/dev/null; pwd; popd >/dev/null)
 
-#############
-#CONFIGURATION
-#############
-export LOGDIR="/p/ldne/faaland1/zfsstress-logs"
-export MOUNTPOINT="/p/ldne"
-export ROOTDIR="${MOUNTPOINT}/faaland1/zfsstress"
-TEST_ZFSSTRESS_RUNTIME=30
-#############
+# use config if it exists
+if [[ -f "${BASEDIR}/execute_test.config" ]]; then
+	. "${BASEDIR}/execute_test.config"
+fi
 
 ZFSSTRESS="${BASEDIR}/runstress.sh"
 
@@ -19,19 +15,11 @@ if [[ ! -x ${ZFSSTRESS} ]]; then
 fi
 
 if [[ ! -d "${ROOTDIR}" ]]; then
-	mkdir -p "${ROOTDIR}"
-	if [[ "$?" -ne 0 ]]; then
-		echo "ERROR: mkdir ${ROOTDIR} (ROOTDIR) failed: $?"
-		exit 2
-	fi
+	${setup_dir} "${ROOTDIR}"
 fi
 
 if [[ ! -d "${LOGDIR}" ]]; then
-	mkdir -p "${LOGDIR}"
-	if [[ "$?" -ne 0 ]]; then
-		echo "ERROR: mkdir ${LOGDIR} (LOGDIR) failed: $?"
-		exit 3
-	fi
+	${setup_dir} "${LOGDIR}"
 fi
 
 echo "running ${ZFSSTRESS} with:"
