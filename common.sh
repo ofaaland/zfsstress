@@ -19,8 +19,14 @@ export ZFS_CREATE_RAND_RECORDSIZE=1
 export ZFS_CREATE_RAND_COMPRESSION=1
 
 export ZPOOL_IMPORT_OPT=${ZPOOL_IMPORT_OPT:-"-d /tmp"}
-## comment SUDO if running scripts as root
-export SUDO="sudo"
+
+# Some tests, such as "zpool create", may require elevated privileges to run.
+# These commands are invoked within the test scripts something like
+#   ${SUDO} ${command}
+# so that they can be invoked under sudo or something similar.  If you need
+# this in your environment, uncomment below or set ${SUDO} to execute the
+# appropriate command.
+#export SUDO="sudo"
 
 #
 # Run $COUNT instances of $CMD, saving the
