@@ -3,7 +3,9 @@ export DATASET="$POOL/fish"
 export LOGDIR=${LOGDIR:-"./"}
 export MOUNTPOINT=${MOUNTPOINT:-"/$DATASET"}
 export ROOTDIR=${ROOTDIR:-"/$MOUNTPOINT"}
-export MAX_FILENAME_LEN=255
+export MAX_FILENAME_LEN=${MAX_FILENAME_LEN:-255}
+export DEFAULT_MAX_SLEEP=${DEFAULT_MAX_SLEEP:-60}
+
 export ZFS=${ZFS:-"/sbin/zfs"}
 export ZPOOL=${ZPOOL:-"/sbin/zpool"}
 export EXPORT_COOKIE=${EXPORT_COOKIE:-`mktemp -t XXXXXXXX`}
@@ -81,10 +83,12 @@ coinflip()
 
 #
 # Sleep for a random number of seconds.
+#   Call without an argument to use default max
+#   Otherwuse call randsleep <somenumber>
 #
 randsleep()
 {
-	local MAXSLEEP=${1:-'60'}
+	local MAXSLEEP=${1:-${DEFAULT_MAX_SLEEP}}
 	sleep $(( $RANDOM % $MAXSLEEP ))
 }
 
