@@ -37,12 +37,10 @@ runmany()
 	local CMD=${@:-'echo hello'}
 	local x=0
 	local logname
-	set -x
 	for instance in $(seq $COUNT); do
 		logname="${LOGDIR}/${CMD}.$(hostname).$$.${instance}.log"
 		$CMD < /dev/null > ${logname} 2>&1 &
 	done
-	set +x
 }
 
 #
