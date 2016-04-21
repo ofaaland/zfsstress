@@ -1,2 +1,60 @@
-Set variables in common.sh to suit environment, then execute
-runstress.sh.  Monitor *.log to see if things are working as expected.
+ZFSStress performs randomized I/O at random intervals on a randomly generated
+directory tree.  It was originally written by Ned Bass for use with the
+ZFSonlinux project, and has been modified for use with Lustre.
+
+Using in a batch environment:
+=============================
+Set the variables in execute_test.config to suit your environment, then submit
+execute_test.sh to your scheduler.  For example:
+
+srun -N 16 ./execute_test.sh
+
+The directory containing zfsstress is must be available on the nodes running
+the test job as well as on the node submitting the job to the scheduler.
+
+Determining PASS or FAIL:
+=========================
+The test passed if all instances (e.g. 16 in the above example) report
+TEST_PASS on stdout.
+
+Interaction between processes:
+==============================
+Each invocation of execute_test.sh runs independently.  However, if run as
+described above, they will share common directories test and log directories on
+the filesystem.  This is normally desirable.
+
+The log names will not collide as the hostname is one component.  The test
+directories and files will be acted upon by all running processes.  If the
+processes run on several nodes, this will test multi-node functionality such as
+lock management.
+
+Many individual operations listed in the logs will fail.  This is expected,
+particularly with many processes using the same test directory, as there is no
+coordination.
+
+Each running instance of execute_test.sh will report TEST_PASS if it ran to the
+time specified in the configuration.  The test is determined to have failed if
+the node(s) running the test or the servers hang or crash.
+
+Better criteria could be implemented.  One option considered is walking the
+directory tree and reading/removing each file and directory, after the
+individual threads making changes are stopped.  In this case every operation
+should succeed.  However, this has not been implemented.
+
+Log files purpose and location:
+===============================
+As configured, logs are stored on the filesystem under test for two reasons:
+	1. The logs grow large quickly, likely exceeding NFS quotas
+	and possibly abusing NFS servers.
+
+	2. The high volume sequential writes provide a test case in and of
+	themselves.
+
+The logs may be necessary for determining what triggered an issue, so there is
+some risk; if an issue damages the filesystem so badly the logs cannot be read,
+it may be impossible to find the bug and fix the issue.  In practice, however,
+node crashes, node hangs, failed system calls, and other more temporary
+symptoms are seen and the logs will still be usable.
+
+Logs can be stored elsewhere if this does not work well.  Set ${LOGDIR} in
+execute_test.config.
