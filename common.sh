@@ -8,7 +8,7 @@ export DEFAULT_MAX_SLEEP=${DEFAULT_MAX_SLEEP:-60}
 
 export ZFS=${ZFS:-"/sbin/zfs"}
 export ZPOOL=${ZPOOL:-"/sbin/zpool"}
-export EXPORT_COOKIE=${EXPORT_COOKIE:-`mktemp -t XXXXXXXX`}
+export EXPORT_COOKIE=${EXPORT_COOKIE:-`mktemp -t zfsstress.export_cookie.XXXXXXXX`}
 
 # Write up to MAX_WRITE_SIZE bytes to randomly selected files
 # in the root of $MOUNTPOINT (by default, $DATASET).
