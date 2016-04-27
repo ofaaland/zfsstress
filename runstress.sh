@@ -20,21 +20,6 @@ runmany 2 ./randxattr.sh
 runmany 2 ./randsymlink.sh
 runmany 2 ./randmkdir.sh
 
-## Pool operations.
-runmany 1 ./randimportexport.sh
-runmany 1 ./randscrub.sh
-
-# Dataset operations.
-runmany 1 ./randsnapshot.sh
-runmany 1 ./randdataset.sh
-runmany 1 ./randsendrecv.sh
-
-# Randomly change dataset properties.
-runmany 1 ./randproprecordsize.sh
-runmany 1 ./randpropdnodesize.sh
-runmany 1 ./randpropxattr.sh
-runmany 1 ./randpropcompression.sh
-
 popd > /dev/null
 
 killjobs()
